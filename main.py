@@ -24,11 +24,43 @@ import math
 #     for i in range(64):
 #         T[i] = (math.pow(2,32)*math.fabs(math.sin(float(i+1))))
 def Mod512(input):
-    return 0
+    tmp = input.encode('utf-8')
+    if (tmp[len(tmp) - 1] == 10):
+        text_byte = tmp[0:len(tmp)-1]
+    else:
+        text_byte = tmp[0:len(tmp)]
+        text_bit = [bin(text_byte[i])[2:] for i in range(0, len(text_byte))]
+        text_bit.append('10000000')
+    while ((len(text_bit) * 8) % 512 != 448):
+        text_bit.append('00000000')
 
-def BlockTo16word(a):
-    return 0
+    tmp = list(bin(len(text_byte * 8))[2:].zfill(64))
+    part1 = tmp[0:32]
+    part2 = tmp[32:64]
+    text_bit.append(''.join(part2[24:32]))
+    text_bit.append(''.join(part2[16:24]))
+    text_bit.append(''.join(part2[8:16]))
+    text_bit.append(''.join(part2[0:8]))
 
+    text_bit.append(''.join(part1[24:32]))
+    text_bit.append(''.join(part1[16:24]))
+    text_bit.append(''.join(part1[8:16]))
+    text_bit.append(''.join(part1[0:8]))
+
+    part512 = [''.join(text_bit[i + j] for i in range(0, 64)) for j in range(0, len(text_bit), 64)]
+    return part512
+
+
+
+def BlockTo16word(binPart):
+    word16 = []
+    for i in range(0, 512,32):
+        bit1 = ''.join(binPart[i:i+8])
+        bit2 = ''.join(binPart[i + 8:i + 16])
+        bit3 = ''.join(binPart[i + 16:i + 24])
+        bit4 = ''.join(binPart[i + 24:i + 32])
+        tmp = bit4 + bit3 + bit2 + bit1
+        word16.append(int(tmp, 2))
 def FF(A, B, C, D, x, y, X):
     return 0
 
