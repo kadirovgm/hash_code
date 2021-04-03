@@ -277,6 +277,37 @@ def collision_of_pswd():
     print(f'Найдена коллизия для пароля: {pswd}\nХеш пароля: {hash_pswd}\nХеш прообраза: {hash_rand}\nитератор={count}')
     print("Прообраз для пароля " + str(pswd) + ": " + str(proobraz))
 
+def str2hex(s):
+    return binascii.hexlify(bytes(str.encode(s)))
+
+
+def lavin_eff(result, result2):
+    print("\n------------------Задание 2------------------------")
+    print("ПРОВЕРКА ЛАВИННОГО ЭФФЕКТА")
+    print("Хешы в бинарном виде:")
+
+    res_hex = str2hex(result)
+    print(res_hex.decode('utf-8'))
+    res2_hex = str2hex(result2)
+    print(res2_hex.decode('utf-8'))
+
+    res_bin = bin(int(res_hex, 16))
+    res2_bin = bin(int(res2_hex, 16))
+    print(res_bin)
+    print(res2_bin)
+    print()
+
+    result = ''.join(format(ord(i), '08b') for i in result)
+    result2 = ''.join(format(ord(i), '08b') for i in result2)
+    print(result)
+    print(result2)
+
+    xor = 0
+    for i, j in zip(result, result2):
+        xor += int(i) ^ int(j)
+
+    print("Количество разных " + str(xor))
+
 
 # функция main()
 
@@ -292,6 +323,7 @@ if __name__ == '__main__':
 
     with open("hash_output.txt", mode='w') as hash_text:
         hash_text.write(str(result) + "\n" + str(result2))
+
     print("------------------Задание 1------------------------")
     print("ГЕНЕРАЦИЯ ХЕШЕЙ")
     print("Хеш-для сообщения '" + str(input_text) + "': ")
@@ -309,19 +341,9 @@ if __name__ == '__main__':
     # res2_bin = "{0:08b}".format(int(result2, 16))
     # print(res_bin)
     # print(res2_bin)
-    print("\n------------------Задание 2------------------------")
-    print("ПРОВЕРКА ЛАВИННОГО ЭФФЕКТА")
-    print("Хешы в бинарном виде:")
-    result = ''.join(format(ord(i), '08b') for i in result)
-    result2 = ''.join(format(ord(i), '08b') for i in result2)
-    print(result)
-    print(result2)
 
-    xor = 0
-    for i, j in zip(result, result2):
-        xor += int(i) ^ int(j)
-
-    print("Количество разных " + str(xor))
+    # Task 2
+    lavin_eff(result, result2)
 
     # Task 3
     collision_of_2_random()
