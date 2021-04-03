@@ -114,7 +114,7 @@ def MD4_generate(input):
     for i in range(0, len(mod512_extended_word)):  # алгоритм, как в методичке: цикл от 0 до длины расширенного сообщения
         X = block_div16(mod512_extended_word[i])  # делим на 16 слов и записываем в X
 
-        AA = A # сохраняем начальное значение
+        AA = A  # сохраняем начальное значение
         BB = B
         CC = C
         DD = D
@@ -219,8 +219,7 @@ def collision_of_2_random():
     #  Exercise #3
     print("\n------------------Задание 3------------------------")
     print("НАХОЖДЕНИЕ КОЛЛИЗИЙ")
-    hashes = [bytes(generate_random_string().encode()), bytes(generate_random_string().encode())]
-
+    # hashes = [bytes(generate_random_string().encode()), bytes(generate_random_string().encode())]
     hashes = [MD4_generate(generate_random_string()),
               MD4_generate(generate_random_string())]
 
@@ -306,9 +305,6 @@ if __name__ == '__main__':
     # binary_result = ''.join(binary_result)
     # binary_result2 = ''.join(binary_result2)
 
-    result = ''.join(format(ord(i), '08b') for i in result)
-    result2 = ''.join(format(ord(i), '08b') for i in result2)
-
     # res_bin = "{0:08b}".format(int(result, 16))
     # res2_bin = "{0:08b}".format(int(result2, 16))
     # print(res_bin)
@@ -316,6 +312,8 @@ if __name__ == '__main__':
     print("\n------------------Задание 2------------------------")
     print("ПРОВЕРКА ЛАВИННОГО ЭФФЕКТА")
     print("Хешы в бинарном виде:")
+    result = ''.join(format(ord(i), '08b') for i in result)
+    result2 = ''.join(format(ord(i), '08b') for i in result2)
     print(result)
     print(result2)
 
