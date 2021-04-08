@@ -210,7 +210,7 @@ def MD4_generate(input):
 
 def generate_random_string() -> str:
     letters = 'abcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+={}[]:"<>?/'
-    length = random.randint(2, 100)
+    length = random.randint(5, 100)
     rand_string = ''.join(random.choice(letters) for i in range(length))
     return rand_string
 
@@ -280,30 +280,60 @@ def collision_of_pswd():
 def str2hex(s):
     return binascii.hexlify(bytes(str.encode(s)))
 
+def convert_base(num, to_base=10, from_base=10):
+    # сначала переводим в 10ичный
+    if isinstance(num, str): # принадлежность экземпляра к классу
+        n = int(num, from_base)
+    else:
+        n = int(num)
+    # переводим 10чный в базу
+    alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    if n < to_base:
+        return alphabet[n]
+    else:
+        return convert_base(n // to_base, to_base) + alphabet[n % to_base] # перевод
+
 
 def lavin_eff(result, result2):
     print("\n------------------Задание 2------------------------")
     print("ПРОВЕРКА ЛАВИННОГО ЭФФЕКТА")
     print("Хешы в бинарном виде:")
 
-    res_hex = str2hex(result)
-    print(res_hex.decode('utf-8'))
-    res2_hex = str2hex(result2)
-    print(res2_hex.decode('utf-8'))
+    # res_hex = str2hex(result)
+    # print(res_hex.decode('utf-8'))
+    # res2_hex = str2hex(result2)
+    # print(res2_hex.decode('utf-8'))
 
-    res_bin = bin(int(res_hex, 16))
-    res2_bin = bin(int(res2_hex, 16))
+    # res_bin = bin(int(res_hex, 16))[2:]
+    # res2_bin = bin(int(res2_hex, 16))[2:]
+
+    # print(res_bin)
+    # print(res2_bin)
+    # print()
+
+    res_bin = convert_base(result, from_base=16, to_base=2).zfill(128)
+
+    # res_bin = res_bin.zfill(32)
     print(res_bin)
-    print(res2_bin)
-    print()
+    res2_bin = convert_base(result2, from_base=16, to_base=2).zfill(128)
 
-    result = ''.join(format(ord(i), '08b') for i in result)
-    result2 = ''.join(format(ord(i), '08b') for i in result2)
-    print(result)
-    print(result2)
+    # res2_bin = res2_bin.zfill(32)
+    print(res2_bin)
+
+    with open("test.txt", mode='w') as test:
+        test.write(str(res_bin) + "\n" + str(res2_bin))
+    # res_list = list(result)
+    # res2_list = list(result2)
+    # print(res_list)
+    # print(res2_list)
+    #
+    #result = ''.join(format(ord(i), '08b') for i in result)
+    #result2 = ''.join(format(ord(i), '08b') for i in result2)
+    # print(result)
+    # print(result2)
 
     xor = 0
-    for i, j in zip(result, result2):
+    for i, j in zip(res_bin, res2_bin):
         xor += int(i) ^ int(j)
 
     print("Количество разных " + str(xor))
